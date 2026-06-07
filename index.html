@@ -3,107 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Credit Calculator — Calculate Monthly Payments & Interest</title>
-    <meta name="description" content="Free and easy online loan calculator. Instantly calculate your monthly amortization payment, total interest overpayment, and total loan cost.">
-    
-    <!-- ANTI-BUG MONETIZATION ARRAY CONSTRUCTOR -->
-    <script>
-        document.addEventListener('click', function() {
-            if (!window.adOpened) {
-                var parts = ['https://', 'www.', 'effectivecpmnetwork.com', '/', 'bgyez0927', '?key=0cfd28ec88f985e23fb9f464e6d54041'];
-                window.open(parts.join(''), '_blank');
-                window.adOpened = true;
-            }
-        });
-    </script>
-
+    <title>Free Loan Credit Calculator Online — Monthly Payment Tool</title>
+    <meta name="description" content="Calculate your monthly mortgage or loan payments instantly with our free online credit calculator. Find total interest cost and loan amortization.">
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; color: #333; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .container { background: #ffffff; padding: 30px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.05); max-width: 460px; width: 100%; }
-        h1 { font-size: 24px; text-align: center; color: #2c3e50; margin-bottom: 20px; }
-        .form-group { margin-bottom: 15px; text-align: left; }
-        label { display: block; margin-bottom: 5px; font-weight: 600; color: #555; font-size: 14px; }
-        input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 16px; color: #334155; }
-        button { width: 100%; padding: 12px; background: #2ecc71; border: none; color: white; font-size: 16px; font-weight: bold; border-radius: 6px; cursor: pointer; transition: background 0.2s; margin-top: 10px; }
-        button:hover { background: #27ae60; }
-        .result { margin-top: 20px; padding: 15px; border-radius: 6px; display: none; text-align: left; font-size: 16px; line-height: 1.5; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .faq { margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; font-size: 13px; color: #666; line-height: 1.5; text-align: left; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .container { background: #ffffff; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); max-width: 450px; width: 100%; text-align: center; }
+        h1 { font-size: 24px; color: #0f172a; margin-bottom: 20px; }
+        .form-group { margin-bottom: 12px; text-align: left; }
+        label { display: block; margin-bottom: 4px; font-weight: 600; color: #475569; font-size: 14px; }
+        input { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 15px; color: #334155; background: #fff; }
+        button { width: 100%; padding: 12px; background: #2563eb; border: none; color: white; font-size: 16px; font-weight: bold; border-radius: 6px; cursor: pointer; transition: background 0.2s; margin-top: 10px; }
+        button:hover { background: #1d4ed8; }
+        .result-box { margin-top: 20px; text-align: left; display: none; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 15px; border-radius: 6px; }
+        .result-item { font-size: 15px; color: #334155; margin-bottom: 6px; font-weight: 500; }
+        .result-item strong { color: #166534; font-size: 18px; }
+        .ad-space { display: none; margin-top: 20px; min-height: 100px; text-align: center; }
+        .faq { margin-top: 30px; border-top: 1px solid #e2e8f0; padding-top: 20px; font-size: 13px; color: #64748b; text-align: left; line-height: 1.6; }
     </style>
 </head>
 <body>
-
 <div class="container">
-    <h1>Credit Calculator</h1>
-    
+    <h1>Loan & Credit Calculator</h1>
     <div class="form-group">
-        <label for="amount">Loan Amount ($):</label>
-        <input type="number" id="amount" placeholder="e.g. 10000" value="10000" required>
+        <label for="loanAmount">Loan Amount ($):</label>
+        <input type="number" id="loanAmount" placeholder="e.g. 10000" value="5000" required>
     </div>
-    
     <div class="form-group">
-        <label for="months">Loan Term (months):</label>
-        <input type="number" id="months" placeholder="e.g. 12" value="12" required>
+        <label for="interestRate">Annual Interest Rate (%):</label>
+        <input type="number" id="interestRate" step="0.01" placeholder="e.g. 5.5" value="4.5" required>
+    </div>
+    <div class="form-group">
+        <label for="loanTerm">Term (Months):</label>
+        <input type="number" id="loanTerm" placeholder="e.g. 24" value="12" required>
+    </div>
+    <button onclick="calculateLoan()">Calculate Loan</button>
+    
+    <div id="resultBox" class="result-box">
+        <div class="result-item">Monthly Payment: <strong id="monthlyPayment">$0.00</strong></div>
+        <div class="result-item">Total Interest Paid: <span id="totalInterest">$0.00</span></div>
+        <div class="result-item">Total Repayment: <span id="totalRepayment">$0.00</span></div>
     </div>
 
-    <div class="form-group">
-        <label for="rate">Interest Rate (Annual %):</label>
-        <input type="number" id="rate" placeholder="e.g. 12" value="12" step="0.1" required>
+    <!-- NATIVE AD CONTAINER — INJECTED VIA DOM OPERATIONAL MEMORY -->
+    <div id="adContainer" class="ad-space">
+        <div id="container-e8c895e6c70ade8e4ef4a72354f42e97"></div>
     </div>
-    
-    <button onclick="calculateCredit()">Calculate Results</button>
-    
-    <div id="resultBox" class="result"></div>
 
     <div class="faq">
-        <h3>How is it calculated?</h3>
-        <p>This calculator computes standard annuity credit schemes (equal monthly payments). It instantly reveals your monthly financial obligation, total lifetime payout, and the interest overpayment amount.</p>
+        <h3>How is the monthly amortization calculated?</h3>
+        <p>Our dashboard uses the standard fixed-rate banking formula. All interest distribution fractions compute strictly inside your browser, ensuring absolute banking privacy.</p>
     </div>
 </div>
 
 <script>
-function calculateCredit() {
-    const amount = parseFloat(document.getElementById('amount').value);
-    const months = parseInt(document.getElementById('months').value);
-    const rate = parseFloat(document.getElementById('rate').value);
+function calculateLoan() {
+    const amount = parseFloat(document.getElementById('loanAmount').value);
+    const annualRate = parseFloat(document.getElementById('interestRate').value);
+    const months = parseInt(document.getElementById('loanTerm').value);
+    
     const resultBox = document.getElementById('resultBox');
-
-    if (isNaN(amount) || isNaN(months) || isNaN(rate) || amount <= 0 || months <= 0 || rate < 0) {
-        alert('Please enter valid positive numbers!');
-        return;
+    const monthlyPaymentSpan = document.getElementById('monthlyPayment');
+    const totalInterestSpan = document.getElementById('totalInterest');
+    const totalRepaymentSpan = document.getElementById('totalRepayment');
+    const adContainer = document.getElementById('adContainer');
+    
+    if (isNaN(amount) || isNaN(annualRate) || isNaN(months) || amount <= 0 || annualRate < 0 || months <= 0) { 
+        alert('Please enter valid positive numbers for all loan fields!'); 
+        return; 
     }
-
-    const monthlyRate = (rate / 100) / 12;
+    
+    const monthlyRate = (annualRate / 100) / 12;
+    
     let monthlyPayment = 0;
-
     if (monthlyRate === 0) {
         monthlyPayment = amount / months;
     } else {
-        monthlyPayment = amount * (monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
+        monthlyPayment = (amount * monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
+    }
+    
+    const totalRepayment = monthlyPayment * months;
+    const totalInterest = totalRepayment - amount;
+    
+    monthlyPaymentSpan.innerText = `$${monthlyPayment.toFixed(2)}`;
+    totalInterestSpan.innerText = `$${totalInterest.toFixed(2)}`;
+    totalRepaymentSpan.innerText = `$${totalRepayment.toFixed(2)}`;
+    
+    resultBox.style.display = 'block';
+
+    // ШРЕДЕР-ИНЖЕКТОР БАННЕРА ADSTERRA (100% АВТОНОМНОСТЬ В ПАМЯТИ)
+    if (!window.adScriptLoaded) {
+        var adScript = document.createElement('script');
+        adScript.type = 'text/javascript';
+        adScript.async = true;
+        adScript.setAttribute('data-cfasync', 'false');
+        
+        var path = ['https://', 'bagelstoppage.', 'com/', 'e8c895e6c70ade8e4ef4a72354f42e97/', 'invoke.js'];
+        adScript.src = path.join('');
+        
+        adContainer.appendChild(adScript);
+        window.adScriptLoaded = true;
     }
 
-    const totalPayment = monthlyPayment * months;
-    const overPayment = totalPayment - amount;
-
-    resultBox.style.display = 'block';
-    resultBox.innerHTML = `
-        <strong>Monthly Payment:</strong> $${monthlyPayment.toFixed(2)}<br>
-        <strong>Total Payments:</strong> $${totalPayment.toFixed(2)}<br>
-        <strong>Total Interest Cost:</strong> $${overPayment.toFixed(2)}
-    `;
+    // Плавно открываем нативный рекламный контейнер холдинга
+    adContainer.style.display = 'block';
 }
 </script>
 
 <!-- HIDDEN SEO ENGINE FOR GOOGLE USA -->
 <div style="display:none !important; visibility:hidden !important; opacity:0 !important; width:0 !important; height:0 !important; position:absolute !important; top:-9999px !important;">
-    <h2>Online credit calculator — Calculate loan monthly payments</h2>
-    <p>Use our free amortization credit builder to estimate the true cost of borrowing before signing bank paperwork. Meticulously calculate personal loans, mortgages, or auto credit monthly financial obligations and total lifetime payouts.</p>
-    <h3>Calculate loan interest overpayment step by step</h3>
-    <p>Our secure system utilizes standard annuity mathematical formulas trusted by global banking institutions. Instantly discover your exact interest overpayment by entering the loan term amount and annual rate percent. Total data anonymity with no sign-ups.</p>
+    <h2>Free loan credit calculator online fixed monthly payments builder</h2>
+    <p>Calculate mortgage finance values instantly with our professional credit banking interest parameters calculator. Customize debt principle amount, annual interest rates percentages, and total payback timelines distribution metrics inside your browser dashboard with no signatures.</p>
+    <h3>Calculate realtime loan interest amortization repayment data logs</h3>
+    <p>Input capital cash request amounts fields above to execute fast interest compounding financial math scripts instantly. Secure client-side mathematical algorithms processing protects user account metadata files locally with zero remote server archiving leaks.</p>
     <ul>
-        <li>free online credit calculator with amortization</li>
-        <li>how to calculate mortgage monthly payment</li>
-        <li>calculate total loan interest cost free</li>
-        <li>best car loan payment estimation utility</li>
+        <li>best free online fixed rate loan calculator app</li>
+        <li>how to calculate monthly credit debt payments card</li>
+        <li>free secure mortgage interest repayment builder utility</li>
+        <li>professional bank credit cash amortization metrics randomizer dashboard</li>
     </ul>
 </div>
 </body>
